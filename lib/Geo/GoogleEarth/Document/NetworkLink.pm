@@ -4,7 +4,7 @@ use base qw{Geo::GoogleEarth::Document::Base};
 
 BEGIN {
     use vars qw($VERSION);
-    $VERSION     = '0.01';
+    $VERSION     = '0.02';
 }
 
 =head1 NAME
@@ -21,6 +21,8 @@ Geo::GoogleEarth::Document::NetworkLink - Geo::GoogleEarth::Document::NetworkLin
 
 =head2 structure
 
+Returns an appropriatly formatted hash reference for feeding directly into the XML creator.
+
 =cut
 
 sub structure {
@@ -31,12 +33,18 @@ sub structure {
 
 =head2 url
 
+Sets or returns the url
+
 =cut
 
 sub url {
   my $self=shift();
-  return $self->{'url'} or die("Error: url must de defined.");
+  if (@_) {
+    $self->{'url'}=shift();
+  }
+  return defined($self->{'url'}) ? $self->{'url'} : 'http://localhost/';
 }
+
 =head1 BUGS
 
 =head1 SUPPORT

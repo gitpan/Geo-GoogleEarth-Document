@@ -1,11 +1,10 @@
 package Geo::GoogleEarth::Document::Folder;
 use strict;
 use base qw{Geo::GoogleEarth::Document::Base}; 
-use Data::Dumper qw{};
 
 BEGIN {
     use vars qw($VERSION);
-    $VERSION     = '0.01';
+    $VERSION     = '0.02';
 }
 
 =head1 NAME
@@ -38,11 +37,11 @@ sub structure {
           $_->structure if ref($_) eq 'Geo::GoogleEarth::Document::NetworkLink';
   }
 
-  my $hash={name=>[$self->name]};
-  $hash->{'Folder'}     = \@Folder      if scalar(@Folder);
-  $hash->{'Placemark'}  = \@Placemark   if scalar(@Placemark);
-  $hash->{'NetworkLink'}= \@NetworkLink if scalar(@NetworkLink);
-  return $hash;
+  my $structure={name=>[$self->name]};
+  $structure->{'Folder'}     = \@Folder      if scalar(@Folder);
+  $structure->{'Placemark'}  = \@Placemark   if scalar(@Placemark);
+  $structure->{'NetworkLink'}= \@NetworkLink if scalar(@NetworkLink);
+  return $structure;
 }
 
 =head2 Folder
@@ -76,6 +75,22 @@ sub NetworkLink {
   my $obj=Geo::GoogleEarth::Document::NetworkLink->new(@_);
   $self->data($obj);
   return $obj;
+}
+
+=head2 data
+
+data is an array reference that holds folder contents
+
+=cut
+
+sub data {
+  my $self=shift();
+  $self->{'data'} = [] unless ref($self->{'data'}) eq ref([]);
+  my $data=$self->{'data'};
+  if (@_) {
+    push @$data, @_;
+  }
+  return wantarray ? @$data : $data;
 }
 
 =head1 BUGS

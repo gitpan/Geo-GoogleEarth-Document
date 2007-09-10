@@ -1,6 +1,11 @@
 Revision history for Perl module Geo::GoogleEarth::Document
 
-0.01 Tue Aug  7 22:50:26 2007
+0.02 2007-09-10
+    - updated documentation
+    - moved data method from Base.pm to Folder.pm
+    - removed one unsed @list assignment
+    - added defaults to everything
+    - added method assignments capability
+
+0.01 2007-09-09
     - original version; created by ExtUtils::ModuleMaker 0.49
-
-

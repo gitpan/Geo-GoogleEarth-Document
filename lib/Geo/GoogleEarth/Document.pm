@@ -5,7 +5,7 @@ use XML::Simple qw{};
 
 BEGIN {
     use vars qw($VERSION);
-    $VERSION     = '0.01';
+    $VERSION     = '0.02';
 }
 
 =head1 NAME
@@ -19,9 +19,6 @@ Geo::GoogleEarth::Document - Creates a GoogleEarth KML Document
   my $folder      = $document->Folder();      #Geo::GoogleEarth::Document::Folder object
   my $placemark   = $document->Placemark();   #Geo::GoogleEarth::Document::Placemark object
   my $networklink = $document->NetworkLink(); #Geo::GoogleEarth::Document::NetworkLink object
-  $folder->push($networklink);
-  $folder->push($placemark);
-  $document->push($folder);
   print $document->render();
 
 =head1 DESCRIPTION

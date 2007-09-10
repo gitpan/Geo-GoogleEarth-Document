@@ -1,9 +1,8 @@
 package Geo::GoogleEarth::Document::Base;
+use strict;
 use Geo::GoogleEarth::Document::Folder;
 use Geo::GoogleEarth::Document::Placemark;
 use Geo::GoogleEarth::Document::NetworkLink;
-
-use strict;
 
 =head1 NAME
 
@@ -43,27 +42,18 @@ sub initialize {
   %$self=@_;
 }
 
-=head2 data
-
-=cut
-
-sub data {
-  my $self=shift();
-  $self->{'data'} = [] unless defined($self->{'data'});
-  my $data=$self->{'data'};
-  if (@_) {
-    push @$data, @_;
-  }
-  return wantarray ? @$data : $data;
-}
-
 =head2 name
+
+Sets or returns the name property.
 
 =cut
 
 sub name {
   my $self=shift();
-  return $self->{'name'} || 'name not defined';
+  if (@_) {
+    $self->{'name'}=join("", @_);
+  }
+  return defined($self->{'name'}) ? $self->{'name'} : 'name not defined';
 }
 
 =head1 BUGS

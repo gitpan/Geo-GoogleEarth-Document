@@ -4,7 +4,7 @@ use base qw{Geo::GoogleEarth::Document::Base};
 
 BEGIN {
     use vars qw($VERSION);
-    $VERSION     = '0.01';
+    $VERSION     = '0.02';
 }
 
 =head1 NAME
@@ -42,18 +42,31 @@ Geo::GoogleEarth::Document::Placemark - Geo::GoogleEarth::Document::Placemark
 
 sub structure {
   my $self=shift();
-  my @list=$self->data;
   my $structure={
-       name       => [$self->{'name'}        || "Name Goes Here!"],
-       description=> [$self->{'description'} ||
-                      "<html><p>". $self->name. "</p></html>" ||
-                      "<html><p>Description Goes Here!</p></html>"],
+       name       => [$self->name],
+       description=> [$self->description],
        Point      => [{coordinates => [join(",", $self->{'lon'} || 0,
                                                  $self->{'lat'} || 0,
                                                  $self->{'alt'} || 0)]}]};
   $structure->{'visibility'} = [$self->{'visibility'}] if defined $self->{'visibility'};
   $structure->{'address'}    = [$self->{'address'}] if defined $self->{'address'};
   return $structure;
+}
+
+=head2 description
+
+=cut
+
+sub description {
+  my $self=shift();
+  if (@_) {
+    $self->{'description'}=join("", @_);
+  }
+  return defined($self->{'description'}) ?
+           $self->{'description'} :
+           defined($self->{'name'}) ?
+             "<html><p>". $self->name. "</p></html>" :
+             "<html><p>description not defined</p></html>"
 }
 
 =head1 BUGS
