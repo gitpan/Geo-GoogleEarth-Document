@@ -1,5 +1,18 @@
 Revision history for Perl module Geo::GoogleEarth::Document
 
+0.04 2007-09-17
+    - updated documentation
+
+0.03 2007-09-16
+    - updated documentation
+    - moved use statements from Base to Folder
+    - simplified Folder->structure
+    - added type method to objects to support Folder->structure simplification
+    - added Placemark lat, lon, alt, address methods
+    - modified Placemark->structure to support address only Placemarks
+    - changed Placemark->description default to undef
+    - added a couple of tests
+
 0.02 2007-09-10
     - updated documentation
     - moved data method from Base.pm to Folder.pm

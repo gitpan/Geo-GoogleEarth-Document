@@ -4,7 +4,7 @@ use base qw{Geo::GoogleEarth::Document::Base};
 
 BEGIN {
     use vars qw($VERSION);
-    $VERSION     = '0.03';
+    $VERSION     = '0.04';
 }
 
 =head1 NAME
@@ -39,7 +39,7 @@ sub type {
 
 =head2 structure
 
-Returns a hash reference for feeding directly into XML::Simple.
+Returns a hash reference for feeding directly into L<XML::Simple>.
 
 =cut
 
@@ -85,7 +85,7 @@ LICENSE file included with this module.
 
 =head1 SEE ALSO
 
-perl(1).
+L<Geo::GoogleEarth::Document> creates a GoogleEarth KML Document.
 
 =cut
 

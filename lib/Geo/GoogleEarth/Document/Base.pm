@@ -77,7 +77,7 @@ LICENSE file included with this module.
 
 =head1 SEE ALSO
 
-perl(1).
+L<Geo::GoogleEarth::Document> creates a GoogleEarth KML Document.
 
 =cut
 

@@ -5,7 +5,7 @@ use XML::Simple qw{};
 
 BEGIN {
     use vars qw($VERSION);
-    $VERSION     = '0.03';
+    $VERSION     = '0.04';
 }
 
 =head1 NAME
@@ -73,7 +73,17 @@ LICENSE file included with this module.
 
 =head1 SEE ALSO
 
-perl(1).
+L<Geo::GoogleEarth::Document> creates a GoogleEarth KML Document.
+
+L<Geo::GoogleEarth::Document::Base> is the base for Geo::GoogleEarth::Document::* packages.
+
+L<Geo::GoogleEarth::Document::Folder> is a Geo::GoogleEarth::Document folder object.
+
+L<Geo::GoogleEarth::Document::NetworkLink> is a Geo::GoogleEarth::Document  NetworkLink object.
+
+L<Geo::GoogleEarth::Document::Placemark> is a Geo::GoogleEarth::Document Placemark object.
+
+L<XML::Simple> is used by this package to generate XML from a data structure.
 
 =cut
 

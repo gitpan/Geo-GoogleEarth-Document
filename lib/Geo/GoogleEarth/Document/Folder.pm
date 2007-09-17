@@ -7,7 +7,7 @@ use Geo::GoogleEarth::Document::NetworkLink;
 
 BEGIN {
     use vars qw($VERSION);
-    $VERSION     = '0.03';
+    $VERSION     = '0.04';
 }
 
 =head1 NAME
@@ -79,7 +79,7 @@ sub type {
 
 =head2 structure
 
-Returns a hash reference for feeding directly into XML::Simple.
+Returns a hash reference for feeding directly into L<XML::Simple>.
 
 Unfortunately, this package cannot guarantee how Folders, Placemarks, or NetworkLinks are ordered when in the same folder.  Because it's a hash reference!  But, order is perserved within a group of Folders, NetworkLink, and Placemarks.
 
@@ -115,7 +115,7 @@ sub data {
 
 =head1 BUGS
 
-Due to a limitation in XML::Simple and the fact that we feed it a hash, it is not possible to specify the order of Folders, Placemarks and NetworkLinks.  However, this package does preserve the order of the inserts within Folders, Placemarks, and NetworkLinks.  A good work around is to put unique types of objects in folders.  
+Due to a limitation in L<XML::Simple> and the fact that we feed it a hash, it is not possible to specify the order of Folders, Placemarks and NetworkLinks.  However, this package does preserve the order of creation within Folders, Placemarks, and NetworkLinks.  A good work around is to put unique types of objects in folders.  
 
 =head1 TODO
 
@@ -139,7 +139,7 @@ LICENSE file included with this module.
 
 =head1 SEE ALSO
 
-perl(1).
+L<Geo::GoogleEarth::Document> creates a GoogleEarth KML Document.
 
 =cut
 

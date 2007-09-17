@@ -4,7 +4,7 @@ use base qw{Geo::GoogleEarth::Document::Base};
 
 BEGIN {
     use vars qw($VERSION);
-    $VERSION     = '0.03';
+    $VERSION     = '0.04';
 }
 
 =head1 NAME
@@ -59,7 +59,7 @@ sub type {
 
 =head2 structure
 
-Returns a hash reference for feeding directly into XML::Simple.
+Returns a hash reference for feeding directly into L<XML::Simple>.
 
 =cut
 
@@ -94,7 +94,7 @@ sub description {
 
 =head2 lat
 
-Sets or returns lat
+Sets or returns lat. The format is signed decimal degrees WGS-84.
 
 =cut
 
@@ -106,7 +106,7 @@ sub lat {
 
 =head2 lon
 
-Sets or returns lon
+Sets or returns lon. The format is signed decimal degrees WGS-84.
 
 =cut
 
@@ -118,7 +118,9 @@ sub lon {
 
 =head2 alt
 
-Sets or returns alt
+Sets or returns alt. The units are meters above the ellipsoid WGS-84.
+
+Typically, Google Earth "snaps" Placemarks to the surface.
 
 =cut
 
@@ -162,7 +164,7 @@ LICENSE file included with this module.
 
 =head1 SEE ALSO
 
-perl(1).
+L<Geo::GoogleEarth::Document> creates a GoogleEarth KML Document.
 
 =cut
 

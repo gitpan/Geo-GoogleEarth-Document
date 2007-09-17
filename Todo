@@ -1,6 +1,5 @@
 TODO list for Perl module Geo::GoogleEarth::Document
 
  - Add Support for Folder->open option
- - Add Support for Placemark->address option
  - Add Support for Placemark->LookAt options
  - Add Support for Document->Style options
