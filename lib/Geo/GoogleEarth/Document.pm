@@ -5,7 +5,7 @@ use XML::Simple qw{};
 
 BEGIN {
     use vars qw($VERSION);
-    $VERSION     = '0.04';
+    $VERSION     = '0.05';
 }
 
 =head1 NAME
@@ -33,7 +33,7 @@ This is all of the code you need to generate a complete Google Earth document.
 
   use Geo::GoogleEarth::Document;
   my $document=Geo::GoogleEarth::Document->new();
-  $document->Placemark(address=>q{1600 Pennsylvania Ave NW, Washington, DC});
+  $document->Placemark(address=>"1600 Pennsylvania Ave NW, Washington, DC");
   print $document->render;
 
 =head2 render

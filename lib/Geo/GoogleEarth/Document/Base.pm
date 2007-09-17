@@ -45,6 +45,10 @@ sub initialize {
 
 Sets or returns the name property.
 
+  my $name=$folder->name;
+  $placemark->name("New Name");
+  $document->name("New Name");
+
 =cut
 
 sub name {

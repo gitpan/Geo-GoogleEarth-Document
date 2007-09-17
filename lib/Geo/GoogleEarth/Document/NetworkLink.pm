@@ -4,7 +4,7 @@ use base qw{Geo::GoogleEarth::Document::Base};
 
 BEGIN {
     use vars qw($VERSION);
-    $VERSION     = '0.04';
+    $VERSION     = '0.05';
 }
 
 =head1 NAME
@@ -30,6 +30,8 @@ Geo::GoogleEarth::Document::NetworkLink is a L<Geo::GoogleEarth::Document::Base>
 
 Returns the object type.
 
+  my $type=$networklink->type;
+
 =cut
 
 sub type {
@@ -41,6 +43,8 @@ sub type {
 
 Returns a hash reference for feeding directly into L<XML::Simple>.
 
+  my $structure=$networklink->structure;
+
 =cut
 
 sub structure {
@@ -51,7 +55,10 @@ sub structure {
 
 =head2 url
 
-Sets or returns the url for the NetworkLink
+Sets or returns the Uniform Resource Locator (URL) for the NetworkLink
+
+  my $url=$networklink->url;
+  $networklink->url("./newdoc.cgi");
 
 =cut
 

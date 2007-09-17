@@ -1,5 +1,9 @@
 Revision history for Perl module Geo::GoogleEarth::Document
 
+0.05 2007-09-17
+    - updated documentation
+    - fixed Placemark->adddress type-o
+
 0.04 2007-09-17
     - updated documentation
 

@@ -4,7 +4,7 @@ use base qw{Geo::GoogleEarth::Document::Base};
 
 BEGIN {
     use vars qw($VERSION);
-    $VERSION     = '0.04';
+    $VERSION     = '0.05';
 }
 
 =head1 NAME
@@ -32,14 +32,14 @@ Geo::GoogleEarth::Document::Placemark is a L<Geo::GoogleEarth::Document::Base> w
 
 =head2 new
 
-  my $obj = Geo::GoogleEarth::Document::Placemark->new(
+  my $placemark=$document->Placemark(
               name       => "White House",
-              lat        => 38.89769,       #WGS-84
-              lon        => -77.036549,     #WGS-84
-              alt        => 30,             #meters above ellipsoid (opt)
+              lat        => 38.89769,       #signed decimal degrees WGS-84
+              lon        => -77.036549,     #signed decimal degrees WGS-84
+              alt        => 30,             #meters above ellipsoid WGS-84
             );
 
-  my $obj = Geo::GoogleEarth::Document::Placemark->new(
+  my $placemark=$document->Placemark(
               name       => "White House",
               address    => "1600 Pennsylvania Ave NW, Washington, DC 20006",
             );
@@ -49,6 +49,8 @@ Geo::GoogleEarth::Document::Placemark is a L<Geo::GoogleEarth::Document::Base> w
 =head2 type
 
 Returns the object type.
+
+  my $type=$placemark->type;
 
 =cut
 
@@ -60,6 +62,8 @@ sub type {
 =head2 structure
 
 Returns a hash reference for feeding directly into L<XML::Simple>.
+
+  my $structure=$placemark->structure;
 
 =cut
 
@@ -94,7 +98,9 @@ sub description {
 
 =head2 lat
 
-Sets or returns lat. The format is signed decimal degrees WGS-84.
+Sets or returns latitude. The format is signed decimal degrees WGS-84.
+
+  my $lat=$placemark->lat;
 
 =cut
 
@@ -106,7 +112,9 @@ sub lat {
 
 =head2 lon
 
-Sets or returns lon. The format is signed decimal degrees WGS-84.
+Sets or returns longitude. The format is signed decimal degrees WGS-84.
+
+  my $lon=$placemark->lon;
 
 =cut
 
@@ -118,9 +126,11 @@ sub lon {
 
 =head2 alt
 
-Sets or returns alt. The units are meters above the ellipsoid WGS-84.
+Sets or returns altitude. The units are meters above the ellipsoid WGS-84.
 
-Typically, Google Earth "snaps" Placemarks to the surface.
+  my $alt=$placemark->alt;
+
+Typically, Google Earth "snaps" Placemarks to the surface regardless of how the altitude is set.
 
 =cut
 
@@ -130,16 +140,18 @@ sub alt {
   return $self->{'alt'};
 }
 
-=head2 adddress
+=head2 address
 
-Sets or returns adddress
+Sets or returns address
+
+  my $address=$placemark->address;
 
 =cut
 
-sub adddress {
+sub address {
   my $self=shift();
-  $self->{'adddress'}=shift() if (@_);
-  return $self->{'adddress'};
+  $self->{'address'}=shift() if (@_);
+  return $self->{'address'};
 }
 
 =head1 BUGS

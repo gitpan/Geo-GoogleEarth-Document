@@ -7,7 +7,7 @@ use Geo::GoogleEarth::Document::NetworkLink;
 
 BEGIN {
     use vars qw($VERSION);
-    $VERSION     = '0.04';
+    $VERSION     = '0.05';
 }
 
 =head1 NAME
@@ -16,7 +16,9 @@ Geo::GoogleEarth::Document::Folder - Geo::GoogleEarth::Document::Folder object
 
 =head1 SYNOPSIS
 
-  use Geo::GoogleEarth::Document::Folder;
+  use Geo::GoogleEarth::Document;
+  my $document=Geo::GoogleEarth::Document->new();
+  my $folder=$document->Folder(name=>"My Folder");
 
 =head1 DESCRIPTION
 
@@ -24,12 +26,15 @@ Geo::GoogleEarth::Document::Folder is a L<Geo::GoogleEarth::Document::Base> with
 
 =head1 USAGE
 
-  $document->Folder();
-  $folder->Folder();
+  my $folder=$document->Folder(); #add folder to $document
+  my $folder=$folder->Folder();   #add folder to $folder
 
 =head2 Folder
 
-Creates a new folder object in the current parent folder object.  Returns the object reference if you need to make any setting changes after construction.
+Constructs a new Folder object and appends it to the parent folder object.  Returns the object reference if you need to make any setting changes after construction.
+
+  my $folder=$folder->Folder(name=>"My Folder");
+  $folder->Folder(name=>"My Folder");
 
 =cut
 
@@ -42,7 +47,12 @@ sub Folder {
 
 =head2 Placemark
 
-Creates a Placemark in the current parent folder object.  Returns the object reference if you need to make any setting changes after construction.
+Constructs a new Placemark object and appends it to the parent folder object.  Returns the object reference if you need to make any setting changes after construction.
+
+  my $placemark=$folder->Placemark(name=>"My Placemark",
+                                   address=>"1600 Pennsylvania Ave NW, Washington, DC");
+
+  $folder->Placemark(name=>"My Placemark", lat=>38.897607, lon=>-77.036554);
 
 =cut
 
@@ -55,7 +65,12 @@ sub Placemark{
 
 =head2 NetworkLink
 
-Creates a NetworkLink in the current parent folder object.  Returns the object reference if you need to make any setting changes after construction.
+Constructs a new NetworkLink object and appends it to the parent folder object.  Returns the object reference if you need to make any setting changes after construction.
+
+  my $networklink=$folder->NetworkLink(name=>"My NetworkLink",
+                                       url=>"./anotherdoc.kml");
+
+  $folder->NetworkLink(name=>"My NetworkLink", url=>"./anotherdoc.kml");
 
 =cut
 
@@ -70,6 +85,8 @@ sub NetworkLink {
 
 Returns the object type.
 
+  my $type=$folder->type;
+
 =cut
 
 sub type {
@@ -81,7 +98,9 @@ sub type {
 
 Returns a hash reference for feeding directly into L<XML::Simple>.
 
-Unfortunately, this package cannot guarantee how Folders, Placemarks, or NetworkLinks are ordered when in the same folder.  Because it's a hash reference!  But, order is perserved within a group of Folders, NetworkLink, and Placemarks.
+Unfortunately, this package cannot guarantee how Folders, Placemarks, or NetworkLinks are ordered when in the same folder.  Because, it's a hash reference!  But, order is preserved within a group of Folders, NetworkLink, and Placemarks.
+
+  my $structure=$folder->structure;
 
 =cut
 
@@ -101,6 +120,10 @@ sub structure {
 
 Pushes arguments onto data array and returns an array or reference that holds folder object content.  This is a list of objects that supports a type and structure method.
 
+  my $data=$folder->data;
+  my @data=$folder->data;
+  $folder->data($placemark);
+
 =cut
 
 sub data {
@@ -115,7 +138,9 @@ sub data {
 
 =head1 BUGS
 
-Due to a limitation in L<XML::Simple> and the fact that we feed it a hash, it is not possible to specify the order of Folders, Placemarks and NetworkLinks.  However, this package does preserve the order of creation within Folders, Placemarks, and NetworkLinks.  A good work around is to put unique types of objects in folders.  
+=head1 LIMITATIONS
+
+Due to a limitation in L<XML::Simple> and the fact that we feed it a hash, it is not possible to specify the order of Folders, Placemarks and NetworkLinks.  However, this package does preserve the order of creation within groups of Folders, Placemarks, and NetworkLinks.  A good work around is to put unique types of objects in folders.  
 
 =head1 TODO
 

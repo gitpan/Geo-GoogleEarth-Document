@@ -2,7 +2,7 @@
 
 # t/001_load.t - check module loading and create testing directory
 
-use Test::More tests => 27;
+use Test::More tests => 31;
 
 BEGIN { use_ok( 'Geo::GoogleEarth::Document' ); }
 BEGIN { use_ok( 'Geo::GoogleEarth::Document::Folder' ); }
@@ -41,6 +41,17 @@ is($placemark->type, "Placemark", '$placemark->type');
 $placemark->name("p1");
 is($placemark->name, "p1", '$placemark->name');
 
+my $address="1600 Pennsylvania Ave NW, Washington, DC";
+my $pmark=$document->Placemark(
+                   name=>"pmark",
+                   address=>$address);
+isa_ok ($pmark, 'Geo::GoogleEarth::Document::Placemark');
+isa_ok ($pmark->structure, 'HASH');
+is($pmark->address, $address, $pmark->address);
+$address.=" 20006";
+$pmark->address($address);
+is($pmark->address, $address, $pmark->address);
+
 my $networklink = $document->NetworkLink(name=>"n1", url=>"u0");
 isa_ok ($networklink, 'Geo::GoogleEarth::Document::NetworkLink');
 isa_ok ($networklink->structure, 'HASH');
@@ -68,6 +79,10 @@ my $output=q{<?xml version='1.0' standalone='yes'?>
       <coordinates>1,2,3</coordinates>
     </Point>
     <description>&lt;html&gt;&lt;p&gt;p1&lt;/p&gt;&lt;/html&gt;</description>
+  </Placemark>
+  <Placemark>
+    <name>pmark</name>
+    <address>1600 Pennsylvania Ave NW, Washington, DC 20006</address>
   </Placemark>
 </Document>
 };
