@@ -2,7 +2,7 @@
 
 # t/001_load.t - check module loading and create testing directory
 
-use Test::More tests => 23;
+use Test::More tests => 27;
 
 BEGIN { use_ok( 'Geo::GoogleEarth::Document' ); }
 BEGIN { use_ok( 'Geo::GoogleEarth::Document::Folder' ); }
@@ -20,15 +20,23 @@ my $folder=$document->Folder(name=>"f1");
 isa_ok ($folder, 'Geo::GoogleEarth::Document::Folder');
 isa_ok ($folder->structure, 'HASH');
 is($folder->name, "f1", '$folder->name');
+is($folder->type, "Folder", '$folder->type');
 
-my $placemark = $document->Placemark(name=>"p0", lon=>1, lat=>2, alt=>3);
+my $placemark = $document->Placemark(name=>"p0",
+                                     lon=>1,
+                                     lat=>2,
+                                     alt=>3,
+                                     description=>'<html><p>d0</p></html>');
 isa_ok ($placemark, 'Geo::GoogleEarth::Document::Placemark');
 isa_ok ($placemark->structure, 'HASH');
 is($placemark->name, "p0", '$placemark->name');
+is($placemark->description, '<html><p>d0</p></html>', '$placemark->description');
+$placemark->description("<html><p>p0</p></html>");
 is($placemark->description, '<html><p>p0</p></html>', '$placemark->description');
 my $desc=q{<html><p>p1</p></html>};
 $placemark->description($desc);
 is($placemark->description, $desc, '$placemark->description');
+is($placemark->type, "Placemark", '$placemark->type');
 
 $placemark->name("p1");
 is($placemark->name, "p1", '$placemark->name');
@@ -40,6 +48,7 @@ is($networklink->name, "n1", '$networklink->name');
 is($networklink->url, "u0", '$networklink->url');
 $networklink->url("u1");
 is($networklink->url, "u1", '$networklink->url');
+is($networklink->type, "NetworkLink", '$networklink->type');
 
 my $output=q{<?xml version='1.0' standalone='yes'?>
 <Document>

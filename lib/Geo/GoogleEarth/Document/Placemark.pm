@@ -4,7 +4,7 @@ use base qw{Geo::GoogleEarth::Document::Base};
 
 BEGIN {
     use vars qw($VERSION);
-    $VERSION     = '0.02';
+    $VERSION     = '0.03';
 }
 
 =head1 NAME
@@ -13,12 +13,20 @@ Geo::GoogleEarth::Document::Placemark - Geo::GoogleEarth::Document::Placemark
 
 =head1 SYNOPSIS
 
-  use Geo::GoogleEarth::Document::Placemark;
-  my $obj = Geo::GoogleEarth::Document::Placemark->new();
+  use Geo::GoogleEarth::Document;
+  my $document=Geo::GoogleEarth::Document->new();
+  $document->Placemark();
 
 =head1 DESCRIPTION
 
+Geo::GoogleEarth::Document::Placemark is a L<Geo::GoogleEarth::Document::Base> with a few other methods.
+
 =head1 USAGE
+
+  my $placemark=$document->Placemark(name=>"Placemark Name",
+                                     lat=>$lat,
+                                     lon=>$lon,
+                                     alt=>$alt);
 
 =head1 CONSTRUCTOR
 
@@ -26,60 +34,122 @@ Geo::GoogleEarth::Document::Placemark - Geo::GoogleEarth::Document::Placemark
 
   my $obj = Geo::GoogleEarth::Document::Placemark->new(
               name       => "White House",
-              description=> "<html><p>White House</p></html>",
-              address    => "1600 Pennsylvania Ave NW, Washington, DC 20006", #(opt)
               lat        => 38.89769,       #WGS-84
               lon        => -77.036549,     #WGS-84
               alt        => 30,             #meters above ellipsoid (opt)
-              visibility => 0,              #(opt)
+            );
+
+  my $obj = Geo::GoogleEarth::Document::Placemark->new(
+              name       => "White House",
+              address    => "1600 Pennsylvania Ave NW, Washington, DC 20006",
             );
 
 =head1 METHODS
 
+=head2 type
+
+Returns the object type.
+
+=cut
+
+sub type {
+  my $self=shift();
+  return "Placemark";
+}
+
 =head2 structure
+
+Returns a hash reference for feeding directly into XML::Simple.
 
 =cut
 
 sub structure {
   my $self=shift();
-  my $structure={
-       name       => [$self->name],
-       description=> [$self->description],
-       Point      => [{coordinates => [join(",", $self->{'lon'} || 0,
-                                                 $self->{'lat'} || 0,
-                                                 $self->{'alt'} || 0)]}]};
-  $structure->{'visibility'} = [$self->{'visibility'}] if defined $self->{'visibility'};
-  $structure->{'address'}    = [$self->{'address'}] if defined $self->{'address'};
+  my $structure={name => [$self->name]};
+  if (defined($self->lat) and defined($self->lon)) {
+    $structure->{'Point'} = [{coordinates => [join(",", $self->lon,
+                                                        $self->lat,
+                                                        $self->alt || 0)]}]
+  }
+  $structure->{'description'} = [$self->description]
+                                    if defined $self->{'description'};
+  $structure->{'visibility'}  = [$self->{'visibility'}]
+                                    if defined $self->{'visibility'};
+  $structure->{'address'}     = [$self->{'address'}]
+                                    if defined $self->{'address'};
   return $structure;
 }
 
 =head2 description
 
+Set or returns the description.  Google Earth uses this as the HTML description in the Placemark popup window.
+
 =cut
 
 sub description {
   my $self=shift();
-  if (@_) {
-    $self->{'description'}=join("", @_);
-  }
-  return defined($self->{'description'}) ?
-           $self->{'description'} :
-           defined($self->{'name'}) ?
-             "<html><p>". $self->name. "</p></html>" :
-             "<html><p>description not defined</p></html>"
+  $self->{'description'}=join("", @_) if (@_);
+  return $self->{'description'};
+}
+
+=head2 lat
+
+Sets or returns lat
+
+=cut
+
+sub lat {
+  my $self=shift();
+  $self->{'lat'}=shift() if (@_);
+  return $self->{'lat'};
+}
+
+=head2 lon
+
+Sets or returns lon
+
+=cut
+
+sub lon {
+  my $self=shift();
+  $self->{'lon'}=shift() if (@_);
+  return $self->{'lon'};
+}
+
+=head2 alt
+
+Sets or returns alt
+
+=cut
+
+sub alt {
+  my $self=shift();
+  $self->{'alt'}=shift() if (@_);
+  return $self->{'alt'};
+}
+
+=head2 adddress
+
+Sets or returns adddress
+
+=cut
+
+sub adddress {
+  my $self=shift();
+  $self->{'adddress'}=shift() if (@_);
+  return $self->{'adddress'};
 }
 
 =head1 BUGS
 
 =head1 SUPPORT
 
+Try geo-perl email list.
+
 =head1 AUTHOR
 
-    Michael R. Davis
+    Michael R. Davis (mrdvt92)
     CPAN ID: MRDVT
-    STOP, LLC
-    domain=>stopllc,tld=>com,account=>mdavis
-    http://www.stopllc.com/
 
 =head1 COPYRIGHT
 

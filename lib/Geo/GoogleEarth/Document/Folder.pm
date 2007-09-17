@@ -1,10 +1,13 @@
 package Geo::GoogleEarth::Document::Folder;
 use strict;
 use base qw{Geo::GoogleEarth::Document::Base}; 
+use Geo::GoogleEarth::Document::Folder;
+use Geo::GoogleEarth::Document::Placemark;
+use Geo::GoogleEarth::Document::NetworkLink;
 
 BEGIN {
     use vars qw($VERSION);
-    $VERSION     = '0.02';
+    $VERSION     = '0.03';
 }
 
 =head1 NAME
@@ -17,34 +20,16 @@ Geo::GoogleEarth::Document::Folder - Geo::GoogleEarth::Document::Folder object
 
 =head1 DESCRIPTION
 
+Geo::GoogleEarth::Document::Folder is a L<Geo::GoogleEarth::Document::Base> with a few other methods.
+
 =head1 USAGE
 
-=head2 structure
-
-=cut
-
-sub structure {
-  my $self=shift();
-  my @Folder=();
-  my @Placemark=();
-  my @NetworkLink=();
-  foreach ($self->data) {
-    push @Folder,
-          $_->structure if ref($_) eq 'Geo::GoogleEarth::Document::Folder';
-    push @Placemark,
-          $_->structure if ref($_) eq 'Geo::GoogleEarth::Document::Placemark';
-    push @NetworkLink,
-          $_->structure if ref($_) eq 'Geo::GoogleEarth::Document::NetworkLink';
-  }
-
-  my $structure={name=>[$self->name]};
-  $structure->{'Folder'}     = \@Folder      if scalar(@Folder);
-  $structure->{'Placemark'}  = \@Placemark   if scalar(@Placemark);
-  $structure->{'NetworkLink'}= \@NetworkLink if scalar(@NetworkLink);
-  return $structure;
-}
+  $document->Folder();
+  $folder->Folder();
 
 =head2 Folder
+
+Creates a new folder object in the current parent folder object.  Returns the object reference if you need to make any setting changes after construction.
 
 =cut
 
@@ -57,6 +42,8 @@ sub Folder {
 
 =head2 Placemark
 
+Creates a Placemark in the current parent folder object.  Returns the object reference if you need to make any setting changes after construction.
+
 =cut
 
 sub Placemark{
@@ -68,6 +55,8 @@ sub Placemark{
 
 =head2 NetworkLink
 
+Creates a NetworkLink in the current parent folder object.  Returns the object reference if you need to make any setting changes after construction.
+
 =cut
 
 sub NetworkLink {
@@ -77,9 +66,40 @@ sub NetworkLink {
   return $obj;
 }
 
+=head2 type
+
+Returns the object type.
+
+=cut
+
+sub type {
+  my $self=shift();
+  return "Folder";
+}
+
+=head2 structure
+
+Returns a hash reference for feeding directly into XML::Simple.
+
+Unfortunately, this package cannot guarantee how Folders, Placemarks, or NetworkLinks are ordered when in the same folder.  Because it's a hash reference!  But, order is perserved within a group of Folders, NetworkLink, and Placemarks.
+
+=cut
+
+sub structure {
+  my $self=shift();
+  my $structure={name=>[$self->name]}; #{Placemark=>[], Folder=>[], ...}
+  foreach my $obj ($self->data) {
+    #$obj->type should be one of Placemark, Folder, NetworkLink
+    $structure->{$obj->type}=[] unless ref($structure->{$obj->type}) eq 'ARRAY';
+    #$obj->structure should be a HASH structure to feed into XML::Simple
+    push @{$structure->{$obj->type}}, $obj->structure;
+  }
+  return $structure;
+}
+
 =head2 data
 
-data is an array reference that holds folder contents
+Pushes arguments onto data array and returns an array or reference that holds folder object content.  This is a list of objects that supports a type and structure method.
 
 =cut
 
@@ -95,15 +115,18 @@ sub data {
 
 =head1 BUGS
 
+Due to a limitation in XML::Simple and the fact that we feed it a hash, it is not possible to specify the order of Folders, Placemarks and NetworkLinks.  However, this package does preserve the order of the inserts within Folders, Placemarks, and NetworkLinks.  A good work around is to put unique types of objects in folders.  
+
+=head1 TODO
+
 =head1 SUPPORT
+
+Try geo-perl email list.
 
 =head1 AUTHOR
 
-    Michael R. Davis
+    Michael R. Davis (mrdvt92)
     CPAN ID: MRDVT
-    STOP, LLC
-    domain=>stopllc,tld=>com,account=>mdavis
-    http://www.stopllc.com/
 
 =head1 COPYRIGHT
 

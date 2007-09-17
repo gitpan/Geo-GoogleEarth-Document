@@ -4,7 +4,7 @@ use base qw{Geo::GoogleEarth::Document::Base};
 
 BEGIN {
     use vars qw($VERSION);
-    $VERSION     = '0.02';
+    $VERSION     = '0.03';
 }
 
 =head1 NAME
@@ -13,15 +13,33 @@ Geo::GoogleEarth::Document::NetworkLink - Geo::GoogleEarth::Document::NetworkLin
 
 =head1 SYNOPSIS
 
-  use Geo::GoogleEarth::Document::NetworkLink;
+  use Geo::GoogleEarth::Document;
+  my $document=Geo::GoogleEarth::Document->new();
+  $document->NetworkLink(url=>"./anotherdocument.cgi");
 
 =head1 DESCRIPTION
 
+Geo::GoogleEarth::Document::NetworkLink is a L<Geo::GoogleEarth::Document::Base> with a few other methods.
+
 =head1 USAGE
+
+  my $networklink=$document->NetworkLink(name=>"My NetworkLink",
+                                         url=>"./anotherdocument.cgi");
+
+=head2 type
+
+Returns the object type.
+
+=cut
+
+sub type {
+  my $self=shift();
+  return "NetworkLink";
+}
 
 =head2 structure
 
-Returns an appropriatly formatted hash reference for feeding directly into the XML creator.
+Returns a hash reference for feeding directly into XML::Simple.
 
 =cut
 
@@ -33,7 +51,7 @@ sub structure {
 
 =head2 url
 
-Sets or returns the url
+Sets or returns the url for the NetworkLink
 
 =cut
 
@@ -49,13 +67,12 @@ sub url {
 
 =head1 SUPPORT
 
+Try geo-perl email list.
+
 =head1 AUTHOR
 
-    Michael R. Davis
+    Michael R. Davis (mrdvt92)
     CPAN ID: MRDVT
-    STOP, LLC
-    domain=>stopllc,tld=>com,account=>mdavis
-    http://www.stopllc.com/
 
 =head1 COPYRIGHT
 

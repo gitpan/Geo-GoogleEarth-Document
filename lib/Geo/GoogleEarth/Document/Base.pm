@@ -1,8 +1,5 @@
 package Geo::GoogleEarth::Document::Base;
 use strict;
-use Geo::GoogleEarth::Document::Folder;
-use Geo::GoogleEarth::Document::Placemark;
-use Geo::GoogleEarth::Document::NetworkLink;
 
 =head1 NAME
 
@@ -14,13 +11,15 @@ Geo::GoogleEarth::Document::Base - Base for Geo::GoogleEarth::Document::* packag
 
 =head1 DESCRIPTION
 
+The is the base of all Geo::GoogleEarth::Document packages.
+
 =head1 USAGE
 
 =head1 CONSTRUCTOR
 
 =head2 new
 
-  my $obj = Geo::GoogleEarth::Document::Base->new();
+  my $document = Geo::GoogleEarth::Document->new();
 
 =cut
 
@@ -60,13 +59,12 @@ sub name {
 
 =head1 SUPPORT
 
+Try geo-perl email list.
+
 =head1 AUTHOR
 
-    Michael R. Davis
+    Michael R. Davis (mrdvt92)
     CPAN ID: MRDVT
-    STOP, LLC
-    domain=>stopllc,tld=>com,account=>mdavis
-    http://www.stopllc.com/
 
 =head1 COPYRIGHT
 
