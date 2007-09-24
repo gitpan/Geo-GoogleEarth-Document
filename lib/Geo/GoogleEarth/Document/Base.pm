@@ -41,6 +41,23 @@ sub initialize {
   %$self=@_;
 }
 
+=head2 function
+
+=cut
+
+sub function {
+  my $self=shift();
+  my $function=shift();
+  if (@_) {
+    $self->{$function} = shift();
+    if (@_) {
+      my $hash=shift();
+      $self->{'options'}->{$function}=ref($hash) eq 'HASH' ? $hash : {};
+    }
+  }
+  return $self->{$function};
+}
+
 =head2 name
 
 Sets or returns the name property.
@@ -53,10 +70,7 @@ Sets or returns the name property.
 
 sub name {
   my $self=shift();
-  if (@_) {
-    $self->{'name'}=join("", @_);
-  }
-  return defined($self->{'name'}) ? $self->{'name'} : 'name not defined';
+  return $self->function('name', @_);
 }
 
 =head1 BUGS

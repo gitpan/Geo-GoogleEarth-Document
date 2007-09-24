@@ -2,7 +2,8 @@
 
 # t/001_load.t - check module loading and create testing directory
 
-use Test::More tests => 31;
+use Test::More tests => 32;
+#use lib qw{./lib};
 
 BEGIN { use_ok( 'Geo::GoogleEarth::Document' ); }
 BEGIN { use_ok( 'Geo::GoogleEarth::Document::Folder' ); }
@@ -47,10 +48,12 @@ my $pmark=$document->Placemark(
                    address=>$address);
 isa_ok ($pmark, 'Geo::GoogleEarth::Document::Placemark');
 isa_ok ($pmark->structure, 'HASH');
-is($pmark->address, $address, $pmark->address);
+is($pmark->address, $address, '$pmark->address');
 $address.=" 20006";
 $pmark->address($address);
-is($pmark->address, $address, $pmark->address);
+is($pmark->address, $address, '$pmark->address');
+$pmark->snippet('s0', {maxLines=>"0"});
+is($pmark->snippet, 's0', '$pmark->snippet');
 
 my $networklink = $document->NetworkLink(name=>"n1", url=>"u0");
 isa_ok ($networklink, 'Geo::GoogleEarth::Document::NetworkLink');
@@ -82,9 +85,13 @@ my $output=q{<?xml version='1.0' standalone='yes'?>
   </Placemark>
   <Placemark>
     <name>pmark</name>
+    <Snippet maxLines="0">s0</Snippet>
     <address>1600 Pennsylvania Ave NW, Washington, DC 20006</address>
   </Placemark>
 </Document>
 };
 
 is($document->render, $output, '$document->render');
+#use Data::Dumper qw{};
+#print Data::Dumper->Dump([$document->structure]);
+#print Data::Dumper->Dump([$document]);

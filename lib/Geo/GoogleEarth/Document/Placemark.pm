@@ -4,7 +4,7 @@ use base qw{Geo::GoogleEarth::Document::Base};
 
 BEGIN {
     use vars qw($VERSION);
-    $VERSION     = '0.05';
+    $VERSION     = '0.06';
 }
 
 =head1 NAME
@@ -69,19 +69,57 @@ Returns a hash reference for feeding directly into L<XML::Simple>.
 
 sub structure {
   my $self=shift();
-  my $structure={name => [$self->name]};
+  my $structure={name=>[$self->name]};
   if (defined($self->lat) and defined($self->lon)) {
     $structure->{'Point'} = [{coordinates => [join(",", $self->lon,
                                                         $self->lat,
                                                         $self->alt || 0)]}]
   }
-  $structure->{'description'} = [$self->description]
-                                    if defined $self->{'description'};
-  $structure->{'visibility'}  = [$self->{'visibility'}]
+  $structure->{'description'} = {content=>$self->description}
+                                    if defined $self->description;
+  $structure->{'visibility'}  = {content=>$self->{'visibility'}}
                                     if defined $self->{'visibility'};
-  $structure->{'address'}     = [$self->{'address'}]
-                                    if defined $self->{'address'};
+  $structure->{'address'}     = {content=>$self->address}
+                                    if defined $self->address;
+  $structure->{'Snippet'}     = {content=>$self->snippet}
+                                    if defined $self->snippet;
+  my %options=$self->options;
+  foreach my $key (keys %options) {
+    my $hash=$structure->{$key};
+    my @hash=%$hash;
+    push @hash, %{$self->options->{$key}};
+    $structure->{$key}={@hash};
+  }
   return $structure;
+}
+
+=head2 options
+
+Returns options hash.
+
+=cut
+
+sub options {
+  my $self=shift();
+  my $hash=$self->{'options'};
+  if (ref($hash) eq 'HASH') {
+    return wantarray ? %$hash : $hash;
+  } else {
+    return wantarray ? () : undef();
+  }
+}
+
+=head2 address
+
+Sets or returns address
+
+  my $address=$placemark->address;
+
+=cut
+
+sub address {
+  my $self=shift();
+  return $self->function('address', @_);
 }
 
 =head2 description
@@ -92,8 +130,36 @@ Set or returns the description.  Google Earth uses this as the HTML description 
 
 sub description {
   my $self=shift();
-  $self->{'description'}=join("", @_) if (@_);
-  return $self->{'description'};
+  return $self->function('description', @_);
+}
+
+=head2 snippet
+
+Sets or returns the "snippet", which is the descriptive text shown in the
+places list.  Optionally sets the maximum number of lines to show.
+
+  my $snippet=$placemark->snippet($text);
+  $placemark->snippet($text, {maxLines=>2});
+  $placemark->snippet("", {maxLines=>0});        #popular setting
+
+=cut
+
+sub snippet {
+  my $self=shift();
+  return $self->function('Snippet', @_);
+}
+
+=head2 visibility
+
+Sets or returns visibility
+
+  my $visibility=$placemark->visibility;
+
+=cut
+
+sub visibility {
+  my $self=shift();
+  return $self->function('visibility', @_);
 }
 
 =head2 lat
@@ -138,20 +204,6 @@ sub alt {
   my $self=shift();
   $self->{'alt'}=shift() if (@_);
   return $self->{'alt'};
-}
-
-=head2 address
-
-Sets or returns address
-
-  my $address=$placemark->address;
-
-=cut
-
-sub address {
-  my $self=shift();
-  $self->{'address'}=shift() if (@_);
-  return $self->{'address'};
 }
 
 =head1 BUGS
