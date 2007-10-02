@@ -4,7 +4,7 @@ use base qw{Geo::GoogleEarth::Document::Base};
 
 BEGIN {
     use vars qw($VERSION);
-    $VERSION     = '0.06';
+    $VERSION     = '0.07';
 }
 
 =head1 NAME
@@ -69,44 +69,33 @@ Returns a hash reference for feeding directly into L<XML::Simple>.
 
 sub structure {
   my $self=shift();
-  my $structure={name=>[$self->name]};
+  my $structure={name=>[$self->name]}; #Not sure why but I need at least one key=>[] in the object for XML:Simple.
+  my %skip=map {$_=>1} (qw{Point lat lon alt options name});
   if (defined($self->lat) and defined($self->lon)) {
     $structure->{'Point'} = [{coordinates => [join(",", $self->lon,
                                                         $self->lat,
                                                         $self->alt || 0)]}]
   }
-  $structure->{'description'} = {content=>$self->description}
-                                    if defined $self->description;
-  $structure->{'visibility'}  = {content=>$self->{'visibility'}}
-                                    if defined $self->{'visibility'};
-  $structure->{'address'}     = {content=>$self->address}
-                                    if defined $self->address;
-  $structure->{'Snippet'}     = {content=>$self->snippet}
-                                    if defined $self->snippet;
+  foreach my $key (keys %$self) {
+    next if exists $skip{$key};
+    $structure->{$key} = {content=>$self->function($key)};
+  }
+# $structure->{'description'} = {content=>$self->description}
+#                                   if defined $self->description;
+# $structure->{'visibility'}  = {content=>$self->visibility}
+#                                   if defined $self->visibility;
+# $structure->{'address'}     = {content=>$self->address}
+#                                   if defined $self->address;
+# $structure->{'Snippet'}     = {content=>$self->snippet}
+#                                   if defined $self->snippet;
   my %options=$self->options;
   foreach my $key (keys %options) {
-    my $hash=$structure->{$key};
+    my $hash=$structure->{$key}||{};
     my @hash=%$hash;
     push @hash, %{$self->options->{$key}};
     $structure->{$key}={@hash};
   }
   return $structure;
-}
-
-=head2 options
-
-Returns options hash.
-
-=cut
-
-sub options {
-  my $self=shift();
-  my $hash=$self->{'options'};
-  if (ref($hash) eq 'HASH') {
-    return wantarray ? %$hash : $hash;
-  } else {
-    return wantarray ? () : undef();
-  }
 }
 
 =head2 address

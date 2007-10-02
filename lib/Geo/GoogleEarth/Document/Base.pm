@@ -19,7 +19,9 @@ The is the base of all Geo::GoogleEarth::Document packages.
 
 =head2 new
 
-  my $document = Geo::GoogleEarth::Document->new();
+  my $document = Geo::GoogleEarth::Document->new(key1=>value1,
+                                                 key2=>[value=>{opt1=>val1}],
+                                                 key3=>{value=>{opt2=>val2}});
 
 =cut
 
@@ -39,9 +41,30 @@ sub new {
 sub initialize {
   my $self = shift();
   %$self=@_;
+  foreach my $key (keys %$self) {
+    if (ref($self->{$key}) eq 'ARRAY') {
+      #[text => {opt->val}]
+      my @array=@{$self->{$key}};
+      $self->{'options'}->{$key}=$array[1] if defined($array[1]);
+      $self->{$key}=$array[0];
+      use Data::Dumper qw{};
+      print Data::Dumper->Dump([@array]) ,"\n";
+    } elsif (ref($self->{$key}) eq 'HASH') {
+      #{text => {opt->val}}
+      my @array=%{$self->{$key}};
+      $self->{'options'}->{$key}=$array[1] if defined($array[1]);
+      $self->{$key}=$array[0];
+    } else { #scalar and objects that overload ""
+      #text
+    }
+  }
 }
 
 =head2 function
+
+This is an internal method that may allow hackers to add custom fields.
+
+  $placemark->function('HashKey' => {key1=>value1, key2=>value2});
 
 =cut
 
@@ -56,6 +79,22 @@ sub function {
     }
   }
   return $self->{$function};
+}
+
+=head2 options
+
+Returns options hash.
+
+=cut
+
+sub options {
+  my $self=shift();
+  my $hash=$self->{'options'};
+  if (ref($hash) eq 'HASH') {
+    return wantarray ? %$hash : $hash;
+  } else {
+    return wantarray ? () : undef();
+  }
 }
 
 =head2 name

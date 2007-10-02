@@ -4,7 +4,7 @@ use base qw{Geo::GoogleEarth::Document::Base};
 
 BEGIN {
     use vars qw($VERSION);
-    $VERSION     = '0.05';
+    $VERSION     = '0.07';
 }
 
 =head1 NAME
@@ -49,8 +49,14 @@ Returns a hash reference for feeding directly into L<XML::Simple>.
 
 sub structure {
   my $self=shift();
-  return {name=>[$self->name],
-          url=>{href=>[$self->url]}};
+  my $structure={name=>[$self->name]};
+  $structure->{'url'}={href=>[$self->url]};
+  my %skip=map {$_=>1} qw{name url}; 
+  foreach my $key (keys %$self) {
+    next if exists $skip{$key};
+    $structure->{$key}=[$self->{$key}];
+  }
+  return $structure;
 }
 
 =head2 url

@@ -52,10 +52,12 @@ is($pmark->address, $address, '$pmark->address');
 $address.=" 20006";
 $pmark->address($address);
 is($pmark->address, $address, '$pmark->address');
+#$pmark->lat(39);
+#$pmark->lon(-77);
 $pmark->snippet('s0', {maxLines=>"0"});
 is($pmark->snippet, 's0', '$pmark->snippet');
 
-my $networklink = $document->NetworkLink(name=>"n1", url=>"u0");
+my $networklink = $document->NetworkLink(name=>"n1", url=>"u0", visibility=>0);
 isa_ok ($networklink, 'Geo::GoogleEarth::Document::NetworkLink');
 isa_ok ($networklink->structure, 'HASH');
 is($networklink->name, "n1", '$networklink->name');
@@ -75,6 +77,7 @@ my $output=q{<?xml version='1.0' standalone='yes'?>
     <url>
       <href>u1</href>
     </url>
+    <visibility>0</visibility>
   </NetworkLink>
   <Placemark>
     <name>p1</name>
