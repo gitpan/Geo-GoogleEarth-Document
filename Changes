@@ -1,5 +1,8 @@
 Revision history for Perl module Geo::GoogleEarth::Document
 
+0.08 2007-10-03
+   -left a Data::Dumper line in Base.pm... Sorry!
+
 0.07 2007-10-01
     - updated documentation
     - moved Placemark->options to Base->options

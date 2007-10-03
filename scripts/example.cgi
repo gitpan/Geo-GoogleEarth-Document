@@ -8,7 +8,6 @@ example.cgi - Geo::GoogleEarth::Document example
 
 use strict;
 use CGI qw{};
-use lib qw{/var/www/html/perl/packages/Geo-GoogleEarth-Document/lib};
 use Geo::GoogleEarth::Document;
 
 my $query=CGI->new();
@@ -17,20 +16,17 @@ my $document=Geo::GoogleEarth::Document->new(name=>"My Document Name");
 foreach my $lon (qw{-77 -78 -79}) {
   my $folder=$document->Folder(name=>$lon);
   foreach my $lat (qw{39 40 41}) {
-    my $point=$folder->Placemark(name    => {"$lat $lon"},
+    my $point=$folder->Placemark(name    => "$lat $lon",
                                  lat     => $lat,
                                  lon     => $lon,
                                  Snippet => ["" => {maxLines=> 0} ],
                                  MyTag   => [X  => {opt1    => 1} ],
                                  MyTag2  => [Y  => {opt2    => 2} ],
-                                 MyTag3  => {Z  => {opt2    => 2} },
+                                 MyTag3  => {Z  => {opt2    => 2} }
                                 );
-    #$point->snippet(""=>{maxLines=>0});
   }
 }
 
-use Data::Dumper qw{};
-print Data::Dumper->Dump([$document->structure]);
 print $query->header('text/xml'),
       $document->render;
 

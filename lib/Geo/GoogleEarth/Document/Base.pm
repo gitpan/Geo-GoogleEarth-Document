@@ -47,8 +47,8 @@ sub initialize {
       my @array=@{$self->{$key}};
       $self->{'options'}->{$key}=$array[1] if defined($array[1]);
       $self->{$key}=$array[0];
-      use Data::Dumper qw{};
-      print Data::Dumper->Dump([@array]) ,"\n";
+      #use Data::Dumper qw{};
+      #print Data::Dumper->Dump([@array]) ,"\n";
     } elsif (ref($self->{$key}) eq 'HASH') {
       #{text => {opt->val}}
       my @array=%{$self->{$key}};
