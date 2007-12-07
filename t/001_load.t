@@ -2,13 +2,14 @@
 
 # t/001_load.t - check module loading and create testing directory
 
-use Test::More tests => 32;
+use Test::More tests => 35;
 #use lib qw{./lib};
 
 BEGIN { use_ok( 'Geo::GoogleEarth::Document' ); }
 BEGIN { use_ok( 'Geo::GoogleEarth::Document::Folder' ); }
 BEGIN { use_ok( 'Geo::GoogleEarth::Document::NetworkLink' ); }
 BEGIN { use_ok( 'Geo::GoogleEarth::Document::Placemark' ); }
+BEGIN { use_ok( 'Geo::GoogleEarth::Document::Style' ); }
 
 my $document = Geo::GoogleEarth::Document->new(name=>"d0");
 isa_ok ($document, 'Geo::GoogleEarth::Document');
@@ -45,6 +46,7 @@ is($placemark->name, "p1", '$placemark->name');
 my $address="1600 Pennsylvania Ave NW, Washington, DC";
 my $pmark=$document->Placemark(
                    name=>"pmark",
+                   styleUrl=>"myicon1",
                    address=>$address);
 isa_ok ($pmark, 'Geo::GoogleEarth::Document::Placemark');
 isa_ok ($pmark->structure, 'HASH');
@@ -65,6 +67,12 @@ is($networklink->url, "u0", '$networklink->url');
 $networklink->url("u1");
 is($networklink->url, "u1", '$networklink->url');
 is($networklink->type, "NetworkLink", '$networklink->type');
+
+my $icon="http://maps.google.com/mapfiles/kml/paddle/L.png";
+my $style=$document->Style(id       => "myicon1",
+                           iconHref => $icon);
+is($style->id, "myicon1", '$style->id');
+is($style->iconHref, $icon, '$style->iconHref');
 
 my $output=q{<?xml version='1.0' standalone='yes'?>
 <Document>
@@ -90,7 +98,15 @@ my $output=q{<?xml version='1.0' standalone='yes'?>
     <name>pmark</name>
     <Snippet maxLines="0">s0</Snippet>
     <address>1600 Pennsylvania Ave NW, Washington, DC 20006</address>
+    <styleUrl>myicon1</styleUrl>
   </Placemark>
+  <Style id="myicon1">
+    <IconStyle>
+      <Icon>
+        <href>http://maps.google.com/mapfiles/kml/paddle/L.png</href>
+      </Icon>
+    </IconStyle>
+  </Style>
 </Document>
 };
 
