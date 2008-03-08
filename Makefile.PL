@@ -9,5 +9,7 @@ WriteMakefile(
                      'strict'       => 0,
                      'base'         => 0,
                      'XML::Simple'  => 2.14,
+                     'Archive::Zip' => 0,
+                     'IO::Scalar'   => 0,     #from IO-stringy
                     },
 );

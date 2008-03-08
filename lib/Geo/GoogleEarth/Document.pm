@@ -3,10 +3,12 @@ use strict;
 use base qw{Geo::GoogleEarth::Document::Folder}; 
 use Geo::GoogleEarth::Document::Style;
 use XML::Simple qw{};
+use Archive::Zip qw{COMPRESSION_DEFLATED};
+use IO::Scalar qw{};
 
 BEGIN {
     use vars qw($VERSION);
-    $VERSION     = '0.09';
+    $VERSION     = '0.10';
 }
 
 =head1 NAME
@@ -51,6 +53,29 @@ sub render {
 
   my $xs=XML::Simple->new(XMLDecl=>1, RootName=>q{Document}, ForceArray=>1);
   return $xs->XMLout($self->structure);
+}
+
+=head2 archive
+
+Returns a KMZ formatted Zipped archive of the XML document
+
+  print $document->archive;
+
+=cut
+
+sub archive {
+  my $self=shift;
+  my $azip=Archive::Zip->new;
+  my $member=$azip->addString($self->render, "doc.kml");
+  $member->desiredCompressionMethod(COMPRESSION_DEFLATED);
+  $member->desiredCompressionLevel(9);
+
+  my $archive=q{};
+  my $iosh=IO::Scalar->new( \$archive );
+  $azip->writeToFileHandle($iosh);
+  $iosh->close;
+
+  return $archive;
 }
 
 =head2 Style

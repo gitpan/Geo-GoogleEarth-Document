@@ -1,11 +1,13 @@
 # http://module-build.sourceforge.net/META-spec.html
 #XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
 name:         Geo-GoogleEarth-Document
-version:      0.09
+version:      0.10
 version_from: lib/Geo/GoogleEarth/Document.pm
 installdirs:  site
 requires:
+    Archive::Zip:                  0
     base:                          0
+    IO::Scalar:                    0
     strict:                        0
     Test::More:                    0
     XML::Simple:                   2.14
