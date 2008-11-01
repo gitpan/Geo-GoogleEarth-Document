@@ -75,39 +75,41 @@ is($style->id, "myicon1", '$style->id');
 is($style->iconHref, $icon, '$style->iconHref');
 
 my $output=q{<?xml version='1.0' standalone='yes'?>
-<Document>
-  <name>d1</name>
-  <Folder>
-    <name>f1</name>
-  </Folder>
-  <NetworkLink>
-    <name>n1</name>
-    <url>
-      <href>u1</href>
-    </url>
-    <visibility>0</visibility>
-  </NetworkLink>
-  <Placemark>
-    <name>p1</name>
-    <Point>
-      <coordinates>1,2,3</coordinates>
-    </Point>
-    <description>&lt;html&gt;&lt;p&gt;p1&lt;/p&gt;&lt;/html&gt;</description>
-  </Placemark>
-  <Placemark>
-    <name>pmark</name>
-    <Snippet maxLines="0">s0</Snippet>
-    <address>1600 Pennsylvania Ave NW, Washington, DC 20006</address>
-    <styleUrl>myicon1</styleUrl>
-  </Placemark>
-  <Style id="myicon1">
-    <IconStyle>
-      <Icon>
-        <href>http://maps.google.com/mapfiles/kml/paddle/L.png</href>
-      </Icon>
-    </IconStyle>
-  </Style>
-</Document>
+<kml xmlns="http://earth.google.com/kml/2.2">
+  <Document>
+    <name>d1</name>
+    <Folder>
+      <name>f1</name>
+    </Folder>
+    <NetworkLink>
+      <name>n1</name>
+      <url>
+        <href>u1</href>
+      </url>
+      <visibility>0</visibility>
+    </NetworkLink>
+    <Placemark>
+      <name>p1</name>
+      <Point>
+        <coordinates>1,2,3</coordinates>
+      </Point>
+      <description>&lt;html&gt;&lt;p&gt;p1&lt;/p&gt;&lt;/html&gt;</description>
+    </Placemark>
+    <Placemark>
+      <name>pmark</name>
+      <Snippet maxLines="0">s0</Snippet>
+      <address>1600 Pennsylvania Ave NW, Washington, DC 20006</address>
+      <styleUrl>myicon1</styleUrl>
+    </Placemark>
+    <Style id="myicon1">
+      <IconStyle>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/paddle/L.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+  </Document>
+</kml>
 };
 
 is($document->render, $output, '$document->render');

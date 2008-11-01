@@ -8,7 +8,7 @@ use IO::Scalar qw{};
 
 BEGIN {
     use vars qw($VERSION);
-    $VERSION     = '0.10';
+    $VERSION     = '0.11';
 }
 
 =head1 NAME
@@ -50,9 +50,8 @@ Returns an XML document with an XML declaration and a root name of "Document"
 
 sub render {
   my $self=shift();
-
-  my $xs=XML::Simple->new(XMLDecl=>1, RootName=>q{Document}, ForceArray=>1);
-  return $xs->XMLout($self->structure);
+  my $xs=XML::Simple->new(XMLDecl=>1, RootName=>q{kml}, ForceArray=>1);
+  return $xs->XMLout({xmlns=>"http://earth.google.com/kml/2.2", Document=>[$self->structure]});
 }
 
 =head2 archive
