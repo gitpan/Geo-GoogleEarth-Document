@@ -4,7 +4,7 @@ use base qw{Geo::GoogleEarth::Document::Base};
 
 BEGIN {
     use vars qw($VERSION);
-    $VERSION     = '0.01';
+    $VERSION     = '0.02';
 }
 
 =head1 NAME
@@ -40,7 +40,7 @@ Geo::GoogleEarth::Document::LineString is a L<Geo::GoogleEarth::Document::Base> 
 
 Returns the object type.
 
-  my $type=$LineString>type;
+  my $type=$LineString->type;
 
 =cut
 

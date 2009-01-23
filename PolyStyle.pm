@@ -1,4 +1,4 @@
-package Geo::GoogleEarth::Document::LineStyle;
+package Geo::GoogleEarth::Document::PolyStyle;
 use strict;
 use base qw{Geo::GoogleEarth::Document::ColorStyle};
 
@@ -9,28 +9,28 @@ BEGIN {
 
 =head1 NAME
 
-Geo::GoogleEarth::Document::LineStyle - Geo::GoogleEarth::Document::LineStyle
+Geo::GoogleEarth::Document::PolyStyle - Geo::GoogleEarth::Document::PolyStyle
 
 =head1 SYNOPSIS
 
   use Geo::GoogleEarth::Document;
   my $document=Geo::GoogleEarth::Document->new();
   my $placemark = $document->placemark();
-  $placemark->LineStyle( width => width );
+  $placemark->PolyStyle( fill => fill, outline => outline );
 
 =head1 DESCRIPTION
 
-Geo::GoogleEarth::Document::LineStyle is a L<Geo::GoogleEarth::Document::ColorStyle> with a few other methods.
+Geo::GoogleEarth::Document::PolyStyle is a L<Geo::GoogleEarth::Document::ColorStyle> with a few other methods.
 
 =head1 USAGE
 
-  my $LineStyle = $placemark->LineStyle( width => 2 );
+  my $PolyStyle = $placemark->PolyStyle( fill => 1, outline => 1 );
 
 =head1 CONSTRUCTOR
 
 =head2 new
 
-  my $LineStyle = $placemark->LineStyle( width => 2 );
+  my $PolyStyle = $placemark->PolyStyle( fill => 1, outline => 1 );
 
 =head1 METHODS
 
@@ -38,28 +38,29 @@ Geo::GoogleEarth::Document::LineStyle is a L<Geo::GoogleEarth::Document::ColorSt
 
 Returns the object type.
 
-  my $type=$LineStyle->type;
+  my $type=$PolyStyle->type;
 
 =cut
 
 sub type {
   my $self=shift();
-  return "LineStyle";
+  return "PolyStyle";
 }
 
 =head2 structure
 
 Returns a hash reference for feeding directly into L<XML::Simple>.
 
-my $structure = $LineStyle->structure;
-<LineStyle id="ID">
- 	<!-- inherited from ColorStyle -->
-	<color>ffffffff</color>            <!-- kml:color -->
-	<colorMode>normal</colorMode>      <!-- colorModeEnum: normal or random -->
+my $structure = $PolyStyle->structure;
+<PolyStyle id="ID">
+  <!-- inherited from ColorStyle -->
+  <color>ffffffff</color>            <!-- kml:color -->
+  <colorMode>normal</colorMode>      <!-- kml:colorModeEnum: normal or random -->
 
-	<!-- specific to LineStyle -->
-	<width>1</width>                   <!-- float -->
-</LineStyle>
+  <!-- specific to PolyStyle -->
+  <fill>1</fill>                     <!-- boolean -->
+  <outline>1</outline>               <!-- boolean -->
+</PolyStyle>
 
 =cut
 
@@ -85,16 +86,28 @@ sub id {
   return $self->{'id'};
 }
 
-=head2 width
+=head2 fill
 
-Sets or return width
+Sets or returns fill
 
 =cut
 
-sub width {
-	my $self=shift;
-	$self->{width} = shift if ( @_ );
-	return $self->{width};
+sub fill {
+	my $self = shift;
+	$self->{fill} = shift if ( @_ );
+	return $self->{fill};
+}
+
+=head2 outline
+
+Sets or returns outline
+
+=cut
+
+sub outline {
+	my $self = shift;
+	$self->{outline} = shift if (@_);
+	return $self->{outline};
 }
 
 =head1 BUGS
